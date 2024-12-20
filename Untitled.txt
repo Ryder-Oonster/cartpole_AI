@@ -1,0 +1,76 @@
+\section*{Time Complexity Analysis}
+
+Pictured below is our time complexity for our Dijkstra’s algorithm implementation, it matches the most optimal complexity for the algorithm’s implementation, despite our usage of it to extrapolate optimal traffic routes, estimating when there’ll be heavy traffic depending on the time of day.
+
+\begin{enumerate}
+    \item \textbf{trafficCalc Function} \\
+    \textbf{Functionality:} Computes a traffic multiplier based on the hour of the day using piecewise cubic polynomials. \\
+    \textbf{Time Complexity:} $\mathcal{O}(1)$ \\
+    \textbf{Reason:} The function uses a constant number of arithmetic operations, including addition, multiplication, and exponentiation, regardless of the input size.
+
+    \item \textbf{edge::ChangeTraffic Function} \\
+    \textbf{Functionality:} Updates the travel time of a road based on its base time, traffic multiplier, and variation. \\
+    \textbf{Time Complexity:} $\mathcal{O}(1)$ \\
+    \textbf{Reason:} This function performs a constant number of arithmetic operations.
+
+    \item \textbf{City::add\_edge Function} \\
+    \textbf{Functionality:} Adds a road (edge) to a city and updates its traffic time. \\
+    \textbf{Time Complexity:} $\mathcal{O}(1)$ \\
+    \textbf{Reason:} The function creates a new edge and pushes it to the city's vector of edges. Both operations have constant time complexity.
+
+    \item \textbf{World::add\_city Function} \\
+    \textbf{Functionality:} Adds a new city to the world and updates associated data structures. \\
+    \textbf{Time Complexity:} $\mathcal{O}(1)$ \\
+    \textbf{Reason:} Adding a city to a vector and a map has constant average time complexity.
+
+    \item \textbf{World::add\_edge Function} \\
+    \textbf{Functionality:} Adds a road between two cities by calling \texttt{City::add\_edge} twice. \\
+    \textbf{Time Complexity:} $\mathcal{O}(1)$ \\
+    \textbf{Reason:} Each \texttt{add\_edge} call is $\mathcal{O}(1)$, and there are two such calls.
+
+    \item \textbf{World::findMin Function} \\
+    \textbf{Functionality:} Finds the city with the smallest travel time that hasn't been finalized. \\
+    \textbf{Time Complexity:} $\mathcal{O}(V)$, where $V$ is the number of cities. \\
+    \textbf{Reason:} The function iterates over all cities to find the minimum value.
+
+    \item \textbf{World::dijk Function (Dijkstra's Algorithm)} \\
+    \textbf{Functionality:} Computes the shortest path from a source city to a destination city. \\
+    \textbf{Time Complexity:} $\mathcal{O}(V^2 + E)$, where $V$ is the number of cities, and $E$ is the number of edges (roads). \\
+    \textbf{Details:} 
+    \begin{itemize}
+        \item The outer loop runs $V$ times (once for each city).
+        \item Within the loop, \texttt{findMin} is called $\mathcal{O}(V)$.
+        \item The inner loop iterates over all edges of the current city ($\mathcal{O}(E/V)$ on average).
+    \end{itemize}
+    Combined, this results in $\mathcal{O}(V^2 + E)$.
+
+    \item \textbf{World::outputGraphToDotFile Function} \\
+    \textbf{Functionality:} Generates a \texttt{.dot} file representing the graph and highlights the optimal path. \\
+    \textbf{Time Complexity:} $\mathcal{O}(V + E)$ \\
+    \textbf{Reason:} Iterates over all cities ($V$) and their edges ($E$) to construct the graph representation.
+
+    \item \textbf{World::updateTraffic Function} \\
+    \textbf{Functionality:} Updates traffic times for all roads based on the current hour. \\
+    \textbf{Time Complexity:} $\mathcal{O}(E)$, where $E$ is the total number of edges. \\
+    \textbf{Reason:} Iterates through all edges in the graph and calls \texttt{ChangeTraffic} $\mathcal{O}(1)$ for each.
+
+    \item \textbf{Main Function} \\
+    \textbf{Functionality:} Integrates all methods to build the world, update traffic, calculate routes, and output results. \\
+    \textbf{Key Calls:}
+    \begin{itemize}
+        \item City and Edge Initialization: Adding $V$ cities: $\mathcal{O}(V)$. Adding $E$ edges: $\mathcal{O}(E)$.
+        \item Traffic Update: $\mathcal{O}(E)$.
+        \item Dijkstra’s Algorithm: $\mathcal{O}(V^2 + E)$.
+        \item Graph Output: $\mathcal{O}(V + E)$.
+    \end{itemize}
+    \textbf{Total Time Complexity:} $\mathcal{O}(V^2 + E)$, dominated by Dijkstra’s algorithm.
+\end{enumerate}
+
+\textbf{Overall Complexity:} For a graph with $V$ cities and $E$ roads:
+\begin{itemize}
+    \item Graph Construction: $\mathcal{O}(V + E)$.
+    \item Traffic Update: $\mathcal{O}(E)$.
+    \item Shortest Path Calculation: $\mathcal{O}(V^2 + E)$.
+    \item Graph Output: $\mathcal{O}(V + E)$.
+    \item \textbf{Overall:} $\mathcal{O}(V^2 + E)$.
+\end{itemize}
